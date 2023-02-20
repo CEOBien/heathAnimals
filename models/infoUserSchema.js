@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const petSchema = new Schema({
+const infoUserSchema = new Schema({
     name:{
         type:String,
         require:true
@@ -14,21 +14,34 @@ const petSchema = new Schema({
         type:Number,
         require:true
     },
-    breed:{
-        type:String,
-        require:true
+    
+    phone:{
+        type:Number
     },
-    img:{
-        data: Buffer,
-        contentType: String 
-    },
-    allergy:{
+    address:{
         type:String
     },
+    img:{
+        type:String
+    },
+    lit:{
+        type:Number
+    },
+    lat:{
+        type:Number
+    },
+
     user:{
         type:Schema.Types.ObjectId,
         ref:'users'
+    },
+    cloudinary_id:{
+        type:String
+    },
+    createdAt:{
+        type:Date,
+        default: Date.now
     }
 });
 
-module.exports = mongoose.model('pets',petSchema);
+module.exports = mongoose.model('infoUsers',infoUserSchema);

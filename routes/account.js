@@ -16,5 +16,8 @@ router.get('/getuser/:id',authController.getUser);
 //get all user
 router.get('/getalluser',authController.getAllUser);
 router.post('/changepassword/:id',authController.changePassword);
+//send email
+
+router.get('/resetpassword',authController.forgotPasswordEmail);
 
 module.exports = router;

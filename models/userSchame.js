@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+    email:{
+        type:String,
+        require:true,
+        unique:true
+    },
     username:{
         type:String,
         require:true,
@@ -10,6 +15,19 @@ const userSchema = new Schema({
     password:{
         type:String,
         require:true
+    },
+    role:{
+        type:String,
+    },
+    resetCode:{
+        type:String,
+        default:null
+
+    },
+    resetToken:{
+        type:String,
+        expireIn: new Date().getTime() + 300,
+        default: Date.now
     },
     createdAt:{
         type:Date,

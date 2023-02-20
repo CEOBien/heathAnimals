@@ -1,10 +1,19 @@
 const User = require("../models/userSchame.js");
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
+const {CourierClient} = require("@trycourier/courier");
 require('dotenv').config();
+
+
+const { Vonage } = require('@vonage/server-sdk')
+
+
+
+
 
 const authController = {
     resgister: async (req,res)=>{
+		const email = req.body.email;
         const username = req.body.usename;
         const password = req.body.password;
        
@@ -20,7 +29,7 @@ const authController = {
                 return res.status(400).json({success:false, mess:'Username already exited'})
 
             const hashPassword = await argon2.hash(password);
-            const newUse = new User({username, password: hashPassword});
+            const newUse = new User({email,username, password: hashPassword});
             await newUse.save();
 
 
@@ -141,6 +150,31 @@ const authController = {
 			console.log(err);
 		}
 		
+	},
+
+	
+	forgotPasswordEmail: async (req,res) =>{
+		const vonage = new Vonage({
+			apiKey: "e1d6072a",
+			apiSecret: "bj5ZHsfkzryfXuNC"
+		  })
+		const from = "Vonage APIs"
+		const to = "0367778384"
+		const text = 'A text message sent using the Vonage SMS API'
+
+		async function sendSMS() {
+			await vonage.sms.send({to, from, text})
+				.then(resp => { console.log('Message sent successfully'); console.log(resp); })
+				.catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+		}
+
+		sendSMS();
+
+		
+		 
+
+	
+			
 	}
 
 }
