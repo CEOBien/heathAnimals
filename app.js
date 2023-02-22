@@ -25,6 +25,9 @@ var infoUserRouter = require('./routes/infoUser');
 var slideRouter = require('./routes/slider');
 var menuRouter = require('./routes/menu');
 var rankRouter = require('./routes/rank');
+var bookingRouter = require('./routes/booking');
+var experienceRouter = require('./routes/experience');
+var feedbackRouter = require('./routes/feedback');
 var app = express();
 
 // view engine setup
@@ -52,6 +55,9 @@ app.use('/infouser',infoUserRouter);
 app.use('/slider',slideRouter);
 app.use('/menu',menuRouter);
 app.use('/rank',rankRouter);
+app.use('/booking',bookingRouter);
+app.use('/experience',experienceRouter);
+app.use('/feedback',feedbackRouter);
 app.use(passport.initialize());
 app.use(passport.session());
 

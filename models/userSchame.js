@@ -24,6 +24,10 @@ const userSchema = new Schema({
         default:null
 
     },
+    info_id:{
+        type:Schema.Types.ObjectId,
+        ref:'infos'
+    },
     resetToken:{
         type:String,
         expireIn: new Date().getTime() + 300,

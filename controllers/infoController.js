@@ -1,4 +1,7 @@
 const Info = require('../models/infoSchema');
+const User = require('../models/userSchame');
+const Experiences = require('../models/experienceSchema');
+const Rank =  require('../models/rankSchema');
 const cloudinary = require('cloudinary').v2;
 
 
@@ -11,10 +14,18 @@ const infoController = {
             const fileData = req.file;
             
             if(!req.body) cloudinary.uploader.destroy(fileData.filename);
-           
-            const savePet = new Info({name,gender,old,height,weight,skill,img:fileData?.path,cloudinary_id:fileData?.filename,phone,address,user:req.userId});
+            const rankId = await Rank.findOne({level:1});
+            const saveExperience = new Experiences({ny_id:'63f35ad2f8f82c929334b23f',level:rankId._id,accumulated:0});
+            const result = await saveExperience.save();
+            const savePet = new Info({name,gender,old,height,weight,skill,img:fileData?.path,
+                cloudinary_id:fileData?.filename,phone,address,user:'63f35ad2f8f82c929334b23f',rank_level:result._id});
+            
+            
+            const resultAll =  await savePet.save();
+            const user = await User.findById(savePet.user);
+            
+            await user.updateOne({info_id:resultAll._id});
 
-            await savePet.save();
             res.json({success:true,mess:'add info for pet success!',pet:savePet});
         } catch (err) {
             console.log(err);
@@ -43,10 +54,18 @@ const infoController = {
 
     findInfoId: async (req,res)=>{
         const id = req.params.id;
+        
         if(!id)
             res.status(401).json({success:false,mess:'not found id'});
         try {
-            const getPet = await Info.findById(id).populate('user', 'username');
+            const getPet = await Info.findOne({user:id}).populate({
+                path: 'rank_level',
+                populate: {
+                  path: 'level',
+                  model: 'rank',
+                },
+              })
+              
             res.json(getPet);
         } catch (err) {
             console.log(err);
@@ -55,7 +74,13 @@ const infoController = {
 
     findAll: async (req, res)=>{
         try {
-            const findAll = await Info.find();
+            const findAll = await Info.find().populate({
+                path: 'rank_level',
+                populate: {
+                  path: 'level',
+                  model: 'rank',
+                },
+              });
             if(findAll){
                 res.json(findAll);
             }else{

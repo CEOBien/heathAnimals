@@ -2,17 +2,22 @@ const mongoose = require('mongoose');
 const Schema =  mongoose.Schema;
 
 const experirenceSchema = new Schema({
-    user_id:{
+    ny_id:{
         type: Schema.Types.ObjectId,
-        ref:'users'
+        ref:'users',
+        unique:[true,'exited you can not add !']
     },
 
-    rank_id:{
-        type: Schema.Types.ObjectId,
-        ref:'rank'
+    level:{
+        type:Schema.Types.ObjectId,
+        ref:'ranks'
     },
+    accumulated:{
+        type:Number,
+        require:true
+    }
     
-});
+},{timestamps:true});
 
 module.exports = mongoose.model('experiences', experirenceSchema);
 

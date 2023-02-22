@@ -13,6 +13,9 @@ const rankSchema = new Schema({
     img:{
         type:String
     },
+    accumulated:{
+        type:String
+    },
     cloudinary_id:{
         type:String
     }

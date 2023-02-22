@@ -41,6 +41,10 @@ const infoSchema = new Schema({
     lat:{
         type:Number
     },
+    rank_level:{
+        type:Schema.Types.ObjectId,
+        ref:'experiences'
+    },
 
     user:{
         type:Schema.Types.ObjectId,

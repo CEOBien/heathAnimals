@@ -3,7 +3,7 @@ const cloudinary = require('cloudinary').v2;
 
 const rankController = {
     add: async (req,res) => {
-        const {level,name} = req.body;
+        const {level,name,accumulated} = req.body;
         const fileData = req.file;
         if(!level || !name){
             cloudinary.uploader.destroy(fileData?.filename);
@@ -37,6 +37,7 @@ const rankController = {
     put: async (req,res) => {
         const level = req.body.level;
         const name = req.body.name;
+        const accumulated = req.body.accumulated;
         const id = req.params.id;
         const fileData = req.file;
         Rank.findOne({level:level,name:name}, (err,data) => {
@@ -54,7 +55,7 @@ const rankController = {
             console.log(deleteImg.cloudinary_id);
             cloudinary.uploader.destroy(deleteImg.cloudinary_id);
             
-            const updateRank = await Rank.findByIdAndUpdate(id,{level,name,img:fileData?.path,cloudinary_id:fileData?.filename},
+            const updateRank = await Rank.findByIdAndUpdate(id,{level,name,accumulated,img:fileData?.path,cloudinary_id:fileData?.filename},
                  {new:true}
                 );
                 res.json(updateRank);
