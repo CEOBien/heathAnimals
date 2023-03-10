@@ -1,11 +1,10 @@
 const User = require("../models/userSchame.js");
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
-const {CourierClient} = require("@trycourier/courier");
+
 require('dotenv').config();
+const nodemailer = require("nodemailer");
 
-
-const { Vonage } = require('@vonage/server-sdk')
 
 
 
@@ -16,6 +15,7 @@ const authController = {
 		const email = req.body.email;
         const username = req.body.usename;
         const password = req.body.password;
+		const role = req.body.role;
        
     
         if(!username || !password){
@@ -29,7 +29,7 @@ const authController = {
                 return res.status(400).json({success:false, mess:'Username already exited'})
 
             const hashPassword = await argon2.hash(password);
-            const newUse = new User({email,username, password: hashPassword});
+            const newUse = new User({email,username, role,password: hashPassword});
             await newUse.save();
 
 
@@ -45,8 +45,9 @@ const authController = {
     },
 
     login: async (req,res)=>{
-        const username = req.body.usename;
-        const password = req.body.password;
+        const username = req.body.username;
+		const password = req.body.password;
+		console.log(username,password);
        
 	// Simple validation
 	if (!username || !password)
@@ -96,11 +97,7 @@ const authController = {
 		
 		try {
 			const user = await User.findById(id);
-			console.log(user.password);
-			if(!user){
-				res.status(400).json({success:false, mess:'account not exits'})
-			}else{
-				//verify password
+		
 				const currentPassword = await argon2.verify(user.password, password)
 				
 				if(currentPassword == true){
@@ -113,7 +110,7 @@ const authController = {
 				}else{
 					res.status(400).json({success:false, mess:'password not same'});
 				}
-			}
+			
 		
 		} catch (err) {
 			console.log(err);
@@ -154,27 +151,60 @@ const authController = {
 
 	
 	forgotPasswordEmail: async (req,res) =>{
-		const vonage = new Vonage({
-			apiKey: "e1d6072a",
-			apiSecret: "bj5ZHsfkzryfXuNC"
-		  })
-		const from = "Vonage APIs"
-		const to = "0367778384"
-		const text = 'A text message sent using the Vonage SMS API'
+		const {email} = req.body;
+		const Check = await User.findOne({email:email});
+		console.log(Check);
+		if(!Check) return res.status(401).json('Email does not exist!');
+		
+		const otp = Math.floor(Math.random() * 900000) + 100000;
+		const hashOtp = await argon2.hash(otp.toString());
+		const resetToken = await Check.updateOne({resetToken:hashOtp});
 
-		async function sendSMS() {
-			await vonage.sms.send({to, from, text})
-				.then(resp => { console.log('Message sent successfully'); console.log(resp); })
-				.catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+
+		// create reusable transporter object using the default SMTP transport
+		let transporter = nodemailer.createTransport({
+			service:"gmail",
+			auth: {
+				user: "daohai271@gmail.com", // generated ethereal user
+				pass: "czfhwpmbnrouvbos", // generated ethereal password
+			},
+		});
+		// send mail with defined transport object
+		let info = await transporter.sendMail({
+			from: "daohai271@gmail.com", // sender address
+			to: email, // list of receivers
+			subject: "Get Code Resetpassword", // Subject line
+			text: "Mã otp  nè: " + otp + " thằng đầu buồi nhập vào nhá", // plain text body
+			
+		  });
+		res.json(resetToken);
+		  
+		
+
+	},
+	newPassword: async (req,res) => {
+		const {email,newpassword,code} = req.body;
+		const Check = await User.findOne({email:email});
+		const encode = await argon2.verify(Check.resetToken, code);
+			if(encode) 
+			{
+				const newPassword = await argon2.hash(newpassword);
+				await Check.updateOne({password:newPassword,resetToken:null});
+				res.json({mess:"ok:",data:newPassword});
+			}else{
+				return res.status(401).json('code incorrent')
+			}
+	},
+	deleteUser: async (req,res) => {
+		const id = req.params.id;
+		if(req.userId == id){
+			return res.status(401).json({mess:"you can't deleted yourself", status:false})
 		}
+		await User.findByIdAndDelete(id);
 
-		sendSMS();
+		res.status(200).json("delete successfully");
 
 		
-		 
-
-	
-			
 	}
 
 }

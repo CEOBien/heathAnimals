@@ -34,7 +34,13 @@ const feedbackController = {
     },
     deleteFeedback: async (req,res) => {
         const id = req.params.id;
+        const checkCmt = await Feedbacks.findOne({_id:id});
+
+        
         try {
+            if(req.userId !== checkCmt.user_id){
+                return res.json({mess:"you mustn't delete"});
+            }
             await Feedbacks.findByIdAndDelete(id);
             res.json('delete successfully');
         } catch (err) {

@@ -3,13 +3,14 @@ var router = express.Router();
 const InfoController = require('../controllers/InfoController');
 const verifyToken = require('../middleware/auth');
 const uploadCloud = require('../config/cloudinary.config');
+const {checkRole} = require('../middleware/authorization');
 //add
-router.post('/add',uploadCloud.single('image'),InfoController.addPets);
-router.delete('/delete/:id',verifyToken,InfoController.delete);
-router.put('/update/:id',uploadCloud.single('image'),InfoController.update);
-router.get('/findinfo/:id',InfoController.findInfoId);
-router.get('/allinfo', InfoController.findAll);
-router.get('/filter',InfoController.fliter);
+router.post('/add',verifyToken,checkRole('admin'),uploadCloud.single('image'),InfoController.addPets);
+router.delete('/delete/:id',checkRole('admin'),verifyToken,InfoController.delete);
+router.put('/update/:id',verifyToken,checkRole(['parter', 'admin']),uploadCloud.single('image'),InfoController.update);
+router.get('/findinfo/:id',verifyToken,InfoController.findInfoId);
+router.get('/allinfo', verifyToken,InfoController.findAll);
+router.get('/filter',verifyToken,InfoController.fliter);
 
 
 

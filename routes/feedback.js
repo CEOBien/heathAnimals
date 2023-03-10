@@ -1,8 +1,11 @@
 var express = require('express');
 var router = express.Router();
 const feedbackController = require('../controllers/feedbackController');
-
-router.post('/add/:id',feedbackController.addFeedback);
-router.put('/update/:id',feedbackController.updateFeedback);
+const {checkRole} = require('../middleware/authorization');
+const verifyToken = require('../middleware/auth');
+router.post('/add/:id',verifyToken,checkRole(['user', 'admin']),feedbackController.addFeedback);
+router.put('/update/:id',verifyToken,checkRole('user'),feedbackController.updateFeedback);
+router.delete('/delete:id',verifyToken,checkRole(['user', 'admin']),feedbackController.deleteFeedback);
+router.get('/findall',verifyToken,feedbackController.findAll);
 
 module.exports = router;

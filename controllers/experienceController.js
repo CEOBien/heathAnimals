@@ -9,16 +9,16 @@ const experienceController = {
       try {
         
         const experience = await Experiences.findOne({ ny_id: id }, 'accumulated');
-        
+        //rank bac diem tich luy =10
         const rank = await Rank.findOne({ accumulated: experience.accumulated });
         
-        
+         
         if(rank){
           const update = await experience.updateOne({level:rank._id});
           
           res.json({mess:'chuc mung ban da thang cap', data:update});
         }else{
-          return res.json('may chua du dang cap');
+          return res.json({mess:'em co non va xanh'});
         }
         
         

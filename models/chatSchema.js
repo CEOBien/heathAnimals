@@ -5,23 +5,19 @@ const Schema = mongoose.Schema;
 
 const messageSchema = new Schema(
   {
-    sender: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "User" 
+    message: {
+        text: { type: String, required: true },
+      },
+      users: Array,
+      sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true,
+      },
     },
-    content: { 
-        type: String, 
-        trim: true 
-    },
-    chat: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Chat" },
-    readBy: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "User" }],
-  },
-  { timestamps: true }
+    {
+      timestamps: true,
+    }
 );
 
-const Message = mongoose.model("Message", messageSchema);
-module.exports = Message;
+module.exports = mongoose.model("Message", messageSchema);

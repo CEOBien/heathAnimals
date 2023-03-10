@@ -11,7 +11,7 @@ const bookingController = {
 
         try {
             
-            const saveBooking = new Booking({user_id:'63f35ab7f8f82c929334b239',ny_id:id,amount:1,hour});
+            const saveBooking = new Booking({user_id:req.userId,ny_id:id,amount:1,hour});
             const result =  await saveBooking.save();
 
             const experience = await Experiences.findOne({ny_id:id});

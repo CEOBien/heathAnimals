@@ -6,8 +6,12 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-var session = require('express-session')
+var session = require('express-session');
 var FacebookStrategy = require('passport-facebook').Strategy;
+const initSocket = require('./config/socket');
+
+const http = require('http');
+
 require('dotenv').config();
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.DB_URL, (err) => {
@@ -16,6 +20,13 @@ mongoose.connect(process.env.DB_URL, (err) => {
  });
 
 
+
+
+ 
+ 
+ 
+ 
+ 
 
 
 
@@ -28,11 +39,17 @@ var rankRouter = require('./routes/rank');
 var bookingRouter = require('./routes/booking');
 var experienceRouter = require('./routes/experience');
 var feedbackRouter = require('./routes/feedback');
+var paypalRouter = require('./routes/payPal');
 var app = express();
+const server = http.createServer(app);
+const socket = initSocket(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+
+app.get('/', (req, res) => res.render('index'));
 
 app.use(session({
   secret: 'keyboard cat',
@@ -58,49 +75,53 @@ app.use('/rank',rankRouter);
 app.use('/booking',bookingRouter);
 app.use('/experience',experienceRouter);
 app.use('/feedback',feedbackRouter);
+app.use('/paypal',paypalRouter);
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
 passport.serializeUser(function(user, cb) {
-  process.nextTick(function() {
-    return cb(null, {
-      user
-      // id: user.id,
-      // username: user.username,
-      // picture: user.picture
-    });
-  });
+  
+  cb(null,user);
 });
 
 passport.deserializeUser(function(user, cb) {
-  process.nextTick(function() {
-    return cb(null, user);
-  });
+  cb(null,user);
 });
-
+console.log(process.env.FACEBOOK_CLIENT_ID);
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback",
-  profileFields: ['id', 'displayName', 'photos', 'email']
-},
-function(accessToken, refreshToken, profile, cb) {
-  return cb(null,profile);
-  // User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-  //   return cb(err, user);
-  // });
+  callbackURL: "http://localhost:3000/auth/facebook/callback"
+}, async (accessToken, refreshToken, profile, cb) => {
+  try {
+    console.log(accessToken);
+    console.log(refreshToken);
+    console.log(profile);
+    return (null,profile);
+  } catch (error) {
+    console.log(error);
+  }
+  
 }
 ));
-
 app.get('/auth/facebook',
-  passport.authenticate('facebook'));
-
+  passport.authenticate('facebook',{scope:'email'}));
+ 
 app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  passport.authenticate('facebook', { successRedirect:'/profile',failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
   });
+  app.get('/profile',(req,res)=>{
+    res.send('ban dang nhap thanh cong roi day')
+  });
+  app.get('/login',(req,res)=>{
+    res.send('qua non')
+  })
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -116,6 +137,10 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+server.listen(3000, () => {
+  console.log('listening on *:3000');
 });
 
 module.exports = app;

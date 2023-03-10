@@ -1,5 +1,56 @@
-extends layout
+doctype html5
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title ĐIỆN THOẠI GIÁ RẺ
+    style.
+      .dienthoai {
+          width: 178px;
+          height: auto;
+          float: left;
+          border: 1px solid #ffffff;
+          border-radius: 5px;
+          margin-top: 20px;
+          overflow: hidden;
+      }
+      .dienthoai img {
+          padding-left: 20px;
+          padding-top: 20px;
+          width: 140px;
+          height: 140px;
+      }
+      .dienthoai p {
+          text-align: center;
+          margin-top: 5px;
+          height: 40px;
+      }
+      .dienthoai h4 {
+          color: red;
+          font-size: 16px;
+          text-align: center;
+          margin-top: 10px;
+      }
+      .button {
+          width: 100%;
+          height: auto;
+          margin: auto;
+          padding-top: 5px;
+          text-align: center;
+      }
+  body
+    header
+      h1 ĐIỆN THOẠI GIÁ RẺ
+    main
+      div.dienthoai
+        h2
+          img(src="https://cdn.tgdd.vn/Products/Images/42/50920/dien-thoai-di-dong-apple-iphone-4S-dienmay.com-b.jpg", alt="Iphone 4s")
+        p Iphone 4s
+        h4 25.00 USD
+        div.button
+          form(action="http://localhost:3000/paypal/pay", method="post")
+            input(type="text", name="cost")
+            label(for="buy-button") Buy
+            button#buy-button(type="submit")
 
-block content
-  h1= title
-  p Welcome to #{title}

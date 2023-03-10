@@ -18,11 +18,8 @@ const userSchema = new Schema({
     },
     role:{
         type:String,
-    },
-    resetCode:{
-        type:String,
-        default:null
-
+        default:'user',
+        enum:['user','admin','parter']
     },
     info_id:{
         type:Schema.Types.ObjectId,
@@ -30,13 +27,8 @@ const userSchema = new Schema({
     },
     resetToken:{
         type:String,
-        expireIn: new Date().getTime() + 300,
-        default: Date.now
-    },
-    createdAt:{
-        type:Date,
-        default: Date.now
+        index: { expires: '20s' }
     }
-});
+},{timestamps:true});
 
 module.exports = mongoose.model('users', userSchema);
