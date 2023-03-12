@@ -61,17 +61,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/auth', accountRouter);
-app.use('/info',infoRouter);
-app.use('/infouser',infoUserRouter);
-app.use('/slider',slideRouter);
-app.use('/menu',menuRouter);
-app.use('/rank',rankRouter);
-app.use('/booking',bookingRouter);
-app.use('/experience',experienceRouter);
-app.use('/feedback',feedbackRouter);
-app.use('/paypal',paypalRouter);
-app.use('/wallet',walletRouter);
+app.use('/api/auth', accountRouter);
+app.use('/api/info',infoRouter);
+app.use('/api/infouser',infoUserRouter);
+app.use('/api/slider',slideRouter);
+app.use('/api/menu',menuRouter);
+app.use('/api/rank',rankRouter);
+app.use('/api/booking',bookingRouter);
+app.use('/api/experience',experienceRouter);
+app.use('/api/feedback',feedbackRouter);
+app.use('/api/paypal',paypalRouter);
+app.use('/api/wallet',walletRouter);
 app.use(passport.initialize());
 app.use(passport.session());
 
