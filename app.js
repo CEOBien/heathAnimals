@@ -45,12 +45,6 @@ var app = express();
 const server = http.createServer(app);
 const socket = initSocket(server);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-
-app.get('/', (req, res) => res.render('index'));
 
 app.use(session({
   secret: 'keyboard cat',
