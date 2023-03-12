@@ -19,9 +19,7 @@ mongoose.connect(process.env.DB_URL, (err) => {
   else console.log("mongdb is connected");
  });
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+
 
 
 var accountRouter = require('./routes/account');
@@ -38,6 +36,10 @@ var walletRouter = require('./routes/wallet');
 var app = express();
 const server = http.createServer(app);
 
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 
 app.use(session({
