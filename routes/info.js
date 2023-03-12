@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const InfoController = require('../controllers/InfoController');
+const InfoController = require('../controllers/infoController');
 const verifyToken = require('../middleware/auth');
 const uploadCloud = require('../config/cloudinary.config');
 const {checkRole} = require('../middleware/authorization');
