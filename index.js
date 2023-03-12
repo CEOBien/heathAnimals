@@ -8,7 +8,7 @@ const cors = require('cors');
 const passport = require('passport');
 var session = require('express-session');
 var FacebookStrategy = require('passport-facebook').Strategy;
-const initSocket = require('./config/socket');
+
 
 const http = require('http');
 
