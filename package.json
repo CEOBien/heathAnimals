@@ -2,11 +2,15 @@
   "name": "heathyanimals",
   "version": "0.0.0",
   "private": true,
+  "main": "app.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "test": "app.js",
-    "start": "nodemon app.js",
-    "build": ""
+    "start": "nodemon app.js"
   },
+
   "dependencies": {
     "@trycourier/courier": "^4.1.1",
     "@vonage/server-sdk": "^3.0.18",
@@ -36,4 +40,5 @@
     "paypal-rest-sdk": "^1.8.1",
     "socket.io": "^4.6.1"
   }
+  
 }

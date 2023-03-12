@@ -1,7 +1,7 @@
 const User = require("../models/userSchame.js");
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
-
+const Wallet = require('../models/walletSchema');
 require('dotenv').config();
 const nodemailer = require("nodemailer");
 
@@ -35,7 +35,8 @@ const authController = {
 
             //return token
             const accessToken = jwt.sign({userId: newUse._id}, process.env.ACCESS_TOKEN_SECRET);
-
+			const wallet = new Wallet({coin:0,userId:newUse._id});
+			await wallet.save();
             res.json({success:true, mess:"success", accessToken});
         } catch (err) {
             console.log(err);

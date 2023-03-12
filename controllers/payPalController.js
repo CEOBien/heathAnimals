@@ -1,6 +1,7 @@
 const historyTransactionSchema = require('../models/historyTransactionSchema');
 const paypal = require('paypal-rest-sdk');
 const payPal = require('../config/paypal.config');
+const Wallet = require('../models/walletSchema');
 
 const transactionsPaypal = {
     pay: async (req,res) => {
@@ -71,7 +72,7 @@ const transactionsPaypal = {
                     }
                 }]
             };
-            paypal.payment.execute(paymentId, execute_payment_json, function(error, payment) {
+            paypal.payment.execute(paymentId, execute_payment_json,async function(error, payment) {
                 if (error) {
                     console.log(error.response);
                     throw error;
@@ -79,6 +80,7 @@ const transactionsPaypal = {
                     console.log(JSON.stringify(payment));
                     const addPayPal = new historyTransactionSchema({ coin, monney,userId:'63fa0aaa5c858509e30e2d15' });
                     addPayPal.save(); // save the transaction
+                    const walletUpdate = await Wallet.findOneAndUpdate({userId:'63fa0aaa5c858509e30e2d15'},{coin:coin},{new:true})
                     res.send('Giao dich thanh cong');
                 }
             });
@@ -92,6 +94,8 @@ const transactionsPaypal = {
     cancel: async (req,res) =>{
         res.status(401).json('giao dich khong thanh cong');
     }
+
+    
 };
 
 module.exports = transactionsPaypal;

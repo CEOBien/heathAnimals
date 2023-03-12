@@ -45,7 +45,10 @@ const infoSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'experiences'
     },
-
+    rent_cost:{
+        type:Number,
+        default:1000
+    },
     user:{
         type:Schema.Types.ObjectId,
         ref:'users'

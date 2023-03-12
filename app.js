@@ -40,6 +40,7 @@ var bookingRouter = require('./routes/booking');
 var experienceRouter = require('./routes/experience');
 var feedbackRouter = require('./routes/feedback');
 var paypalRouter = require('./routes/payPal');
+var walletRouter = require('./routes/wallet');
 var app = express();
 const server = http.createServer(app);
 const socket = initSocket(server);
@@ -76,6 +77,7 @@ app.use('/booking',bookingRouter);
 app.use('/experience',experienceRouter);
 app.use('/feedback',feedbackRouter);
 app.use('/paypal',paypalRouter);
+app.use('/wallet',walletRouter);
 app.use(passport.initialize());
 app.use(passport.session());
 
