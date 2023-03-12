@@ -22,14 +22,6 @@ mongoose.connect(process.env.DB_URL, (err) => {
 
 
 
- 
- 
- 
- 
- 
-
-
-
 var accountRouter = require('./routes/account');
 var infoRouter = require('./routes/info');
 var infoUserRouter = require('./routes/infoUser');
@@ -43,7 +35,7 @@ var paypalRouter = require('./routes/payPal');
 var walletRouter = require('./routes/wallet');
 var app = express();
 const server = http.createServer(app);
-const socket = initSocket(server);
+
 
 
 app.use(session({
