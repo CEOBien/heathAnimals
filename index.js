@@ -85,10 +85,10 @@ passport.serializeUser(function(user, cb) {
 passport.deserializeUser(function(user, cb) {
   cb(null,user);
 });
-
+console.log(process.env.FACEBOOK_CLIENT_ID);
 passport.use(new FacebookStrategy({
-  clientID: '5492398434198789',
-  clientSecret: "3b6bbe6eb709a56f0b98fa617e23f082",
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   callbackURL: "http://localhost:3000/auth/facebook/callback"
 }, async (accessToken, refreshToken, profile, cb) => {
   try {
