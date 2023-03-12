@@ -2,13 +2,13 @@
   "name": "heathyanimals",
   "version": "0.0.0",
   "private": true,
-  "main": "index.js",
+  "main": "app.js",
   "engines": {
     "node": "18.x"
   },
   "scripts": {
-    "test": "index.js",
-    "start": "nodemon index.js"
+    "test": "app.js",
+    "start": "nodemon app.js"
   },
 
   "dependencies": {
