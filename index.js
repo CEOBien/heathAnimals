@@ -6,8 +6,8 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
-var session = require('express-session');
-var FacebookStrategy = require('passport-facebook').Strategy;
+// var session = require('express-session');
+// var FacebookStrategy = require('passport-facebook').Strategy;
 const initSocket = require('./config/socket');
 
 const http = require('http');
@@ -20,13 +20,6 @@ mongoose.connect(process.env.DB_URL, (err) => {
  });
 
 
-
-
- 
- 
- 
- 
- 
 
 
 
@@ -46,12 +39,12 @@ const server = http.createServer(app);
 const socket = initSocket(server);
 
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}))
+// app.use(session({
+//   secret: 'keyboard cat',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: false }
+// }))
 
 app.use(cors());
 app.use(logger('dev'));
@@ -77,46 +70,46 @@ app.use(passport.session());
 
 
 
-passport.serializeUser(function(user, cb) {
+// passport.serializeUser(function(user, cb) {
   
-  cb(null,user);
-});
+//   cb(null,user);
+// });
 
-passport.deserializeUser(function(user, cb) {
-  cb(null,user);
-});
-console.log(process.env.FACEBOOK_CLIENT_ID);
-passport.use(new FacebookStrategy({
-  clientID: process.env.FACEBOOK_CLIENT_ID,
-  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback"
-}, async (accessToken, refreshToken, profile, cb) => {
-  try {
-    console.log(accessToken);
-    console.log(refreshToken);
-    console.log(profile);
-    return (null,profile);
-  } catch (error) {
-    console.log(error);
-  }
+// passport.deserializeUser(function(user, cb) {
+//   cb(null,user);
+// });
+// console.log(process.env.FACEBOOK_CLIENT_ID);
+// passport.use(new FacebookStrategy({
+//   clientID: process.env.FACEBOOK_CLIENT_ID,
+//   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+//   callbackURL: "http://localhost:3000/auth/facebook/callback"
+// }, async (accessToken, refreshToken, profile, cb) => {
+//   try {
+//     console.log(accessToken);
+//     console.log(refreshToken);
+//     console.log(profile);
+//     return (null,profile);
+//   } catch (error) {
+//     console.log(error);
+//   }
   
-}
-));
-app.get('/auth/facebook',
-  passport.authenticate('facebook',{scope:'email'}));
+// }
+// ));
+// app.get('/auth/facebook',
+//   passport.authenticate('facebook',{scope:'email'}));
  
-app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect:'/profile',failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
-  app.get('/profile',(req,res)=>{
-    res.send('ban dang nhap thanh cong roi day')
-  });
-  app.get('/login',(req,res)=>{
-    res.send('qua non')
-  })
+// app.get('/auth/facebook/callback',
+//   passport.authenticate('facebook', { successRedirect:'/profile',failureRedirect: '/login' }),
+//   function(req, res) {
+//     // Successful authentication, redirect home.
+//     res.redirect('/');
+//   });
+//   app.get('/profile',(req,res)=>{
+//     res.send('ban dang nhap thanh cong roi day')
+//   });
+//   app.get('/login',(req,res)=>{
+//     res.send('qua non')
+//   })
 
 
 // catch 404 and forward to error handler
