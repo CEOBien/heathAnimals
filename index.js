@@ -36,7 +36,7 @@ var walletRouter = require('./routes/wallet');
 var app = express();
 const server = http.createServer(app);
 
-
+app.set('view engine', 'ejs');
 
 
 app.use(session({
