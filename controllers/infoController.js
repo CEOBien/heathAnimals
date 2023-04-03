@@ -15,10 +15,10 @@ const infoController = {
             
             if(!req.body) cloudinary.uploader.destroy(fileData.filename);
             const rankId = await Rank.findOne({level:1});
-            const saveExperience = new Experiences({ny_id:'63f35ad2f8f82c929334b23f',level:rankId._id,accumulated:0});
+            const saveExperience = new Experiences({ny_id:req.userId,level:rankId._id,accumulated:0});
             const result = await saveExperience.save();
             const savePet = new Info({name,gender,old,height,weight,skill,img:fileData?.path,
-                cloudinary_id:fileData?.filename,phone,address,user:'63f35ad2f8f82c929334b23f',rank_level:result._id});
+                cloudinary_id:fileData?.filename,phone,address,user:req.userId,rank_level:result._id});
             
             
             const resultAll =  await savePet.save();

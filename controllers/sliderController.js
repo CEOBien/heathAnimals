@@ -16,15 +16,20 @@ const sliderController = {
     
     add:async(req,res)=>{
         const title = req.body.title;
+        
         if(!title){
             res.status(401).json('title empty!!!!!!!');
         }
         try {
-            const fileData = req.file;
-            console.log(fileData);
-            const sliderSave = new Slider({title,img:fileData?.path,cloudinary_id:fileData?.filename});
-            await sliderSave.save();
 
+            const fileData = req.file;
+            const sliderSave = new Slider({
+                title,
+                img: fileData?.path,
+                cloudinary_id: fileData?.filename
+              });
+            await sliderSave.save();
+     
             res.status(200).json({mess:'add successfully!!!',slide:sliderSave});
         } catch (err) {
             console.log(err)

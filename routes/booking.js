@@ -5,6 +5,8 @@ const {checkRole} = require('../middleware/authorization');
 const verifyToken = require('../middleware/auth');
 //localhost:3000//booking/add/16814173123132
 router.post('/add/:id',bookingController.add);
+router.put('/handel/:id',bookingController.handleBookingAccept);
+router.get('/listbooking/:id',bookingController.getIdBooking);
 
 
 

@@ -25,6 +25,12 @@ const userSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'infos'
     },
+    googleId:{
+        type:String
+    },
+    name:{
+        type:String
+    },
     resetToken:{
         type:String,
         index: { expires: '20s' }

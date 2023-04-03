@@ -6,10 +6,13 @@ const checkRole = (role) => {
     return async (req, res, next) => {
       try {
             // Get the user's ID from the JWT
-          const token = req.headers.authorization.split(' ')[2];
+          const token = req.headers.authorization.split(' ')[1];
           const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
           const userId = decodedToken.userId;
-
+          if (!token)
+          return res
+            .status(401)
+            .json({ success: false, message: 'Access token not found' })
           // Find the user in the database and check their role
           const user = await User.findById(userId);
           if (!user) {

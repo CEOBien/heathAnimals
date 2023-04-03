@@ -13,14 +13,28 @@ const bookingSchema = new Schema({
     amount:{
         type:Number
     },
-    hour:{
-        type:Number,
-        require:true
-    },
     status:{
         type: String,
-        enum: ['INACCEPT', 'ACCEPT', 'FINISH'],
+        enum: ['INACCEPT', 'ACCEPT', 'FINISH','CANCEl'],
         default: 'INACCEPT'
+    },
+    price:{
+        type:String
+    },
+    startDate:{
+        type:String,
+        require:true
+    },
+    endDate:{
+        type:String,
+        require:true
+    },
+    day:{
+        type:String,
+        require:true
+    },
+    intermediaryToken:{
+        type:String
     }
 },{timestamps:true});
 

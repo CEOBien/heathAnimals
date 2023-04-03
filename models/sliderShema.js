@@ -21,6 +21,9 @@ const SlideSchema = new Schema({
         type:Date,
         default:Date.now
     }
-});
+     
 
+    
+});
+SlideSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 module.exports = mongoose.model('sliders',SlideSchema);

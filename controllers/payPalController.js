@@ -7,7 +7,7 @@ const transactionsPaypal = {
     pay: async (req,res) => {
         // const {coin,monney} = req.body;
         const coin = req.body.cost;
-        const monney = 200000.00;
+        const monney = req.body.monney;
         const create_payment_json = {
             "intent": "sale",
             "payer": {
@@ -22,14 +22,14 @@ const transactionsPaypal = {
                     "items": [{
                         "name": coin,
                         "sku": "1",
-                        "price": "25.00",
+                        "price": monney,
                         "currency": "USD",
                         "quantity": 1
                     }]
                 },
                 "amount": {
                     "currency": "USD",
-                    "total": "25.00"
+                    "total": monney
                 },
                 "description": "you cant not cancer if u was accept"
             }]
@@ -68,7 +68,7 @@ const transactionsPaypal = {
                 "transactions": [{
                     "amount": {
                         "currency": "USD",
-                        "total": "25.00"
+                        "total": monney
                     }
                 }]
             };
@@ -78,9 +78,9 @@ const transactionsPaypal = {
                     throw error;
                 } else {
                     console.log(JSON.stringify(payment));
-                    const addPayPal = new historyTransactionSchema({ coin, monney,userId:'63fa0aaa5c858509e30e2d15' });
+                    const addPayPal = new historyTransactionSchema({ coin, monney,userId:req.userId });
                     addPayPal.save(); // save the transaction
-                    const walletUpdate = await Wallet.findOneAndUpdate({userId:'63fa0aaa5c858509e30e2d15'},{coin:coin},{new:true})
+                    const walletUpdate = await Wallet.findOneAndUpdate({userId:req.userId},{coin:coin},{new:true})
                     res.send('Giao dich thanh cong');
                 }
             });
