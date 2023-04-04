@@ -58,16 +58,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/api/v1/auth', accountRouter);
-app.use('/api/v1',infoRouter);
-app.use('/api/v1',infoUserRouter);
-app.use('/api/v1',slideRouter);
-app.use('/api/v1',menuRouter);
-app.use('/api/v1',rankRouter);
-app.use('/api/v1',bookingRouter);
-app.use('/api/v1',experienceRouter);
-app.use('/api/v1',feedbackRouter);
-app.use('/api/v1',paypalRouter);
-app.use('/api/v1',walletRouter);
+app.use('/api/v1/parter',infoRouter);
+app.use('/api/v1/user',infoUserRouter);
+app.use('/api/v1/slider',slideRouter);
+app.use('/api/v1/menu',menuRouter);
+app.use('/api/v1/rank',rankRouter);
+app.use('/api/v1/book',bookingRouter);
+app.use('/api/v1/experience',experienceRouter);
+app.use('/api/v1/feedback',feedbackRouter);
+app.use('/api/v1/paypal',paypalRouter);
+app.use('/api/v1/wallet',walletRouter);
 
 
 
