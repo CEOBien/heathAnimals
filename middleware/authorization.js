@@ -8,7 +8,8 @@ const checkRole = (role) => {
             // Get the user's ID from the JWT
           const token = req.headers.authorization.split(' ')[1];
           const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-          const userId = decodedToken.userId;
+          const userId = decodedToken.id;
+          
           if (!token)
           return res
             .status(401)
@@ -16,7 +17,7 @@ const checkRole = (role) => {
           // Find the user in the database and check their role
           const user = await User.findById(userId);
           if (!user) {
-            throw new Error('User not found');
+            throw new Error('User not found!!!!!');
           }
           if (!role.includes(user.role)) {
             throw new Error('Unauthorized');

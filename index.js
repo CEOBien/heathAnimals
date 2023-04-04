@@ -14,6 +14,7 @@ const http = require('http');
 
 require('dotenv').config();
 mongoose.set('strictQuery', false);
+
 mongoose.connect(process.env.DB_URL, { useNewUrlParser: true },(err) => {
   if(err) console.log(err) 
   else console.log("mongdb is connected");

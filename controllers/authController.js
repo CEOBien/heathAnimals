@@ -196,6 +196,7 @@ const authController = {
   getAllUser: async (req, res) => {
     try {
       const getAllUser = await User.find();
+      console.log(getAllUser);
       if (!getAllUser) {
         res.status(400).json({ success: false, mess: "not found users" });
       } else {
