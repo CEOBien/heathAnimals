@@ -15,7 +15,7 @@ const infoUserController = {
             const savePet = new Info({name,gender,old,img:fileData.path,phone,address,cloudinary_id:fileData?.filename,user:req.userId});
 
             await savePet.save();
-            res.json({success:true,mess:'add info for pet success!',pet:savePet});
+            res.json({success:true,mess:'add info successfully!',pet:savePet});
         } catch (err) {
             console.log(err);
         }
@@ -64,19 +64,15 @@ const infoUserController = {
         }
     },
 
-    delete: async (req,res)=>{
+    deleteUser : async (req,res) => {
         try {
-            const deletePet = await Info.findById(req.params.id);
-            await cloudinary.uploader.destroy(deletePet.cloudinary_id);
-            deletePet.remove();
-            
-            res.json({success:true,mess:'deleted success!'});
+            const getAllPet = await Info.findByIdAndDelete(id);
+            res.json(getAllPet);
         } catch (err) {
             console.log(err);
         }
-        
+    }
 
-    },
     
 }
 

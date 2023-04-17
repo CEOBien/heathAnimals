@@ -113,6 +113,7 @@ const authController = {
           success: true,
           message: "User logged in successfully",
           accessToken,
+          data:user.id,
         });
       }
     } catch (error) {
@@ -186,10 +187,11 @@ const authController = {
       if (!getUser) {
         res.status(400).json({ success: false, mess: "not found account" });
       } else {
-        res.json(getUser);
+        res.json({ mess: "successfully", data: getUser });
       }
     } catch (err) {
       console.log(err);
+      return { mess: err.message, status: 401 };
     }
   },
 
@@ -200,10 +202,11 @@ const authController = {
       if (!getAllUser) {
         res.status(400).json({ success: false, mess: "not found users" });
       } else {
-        res.json(getAllUser);
+        res.json({ mess: "successfully", data: getAllUser });
       }
     } catch (err) {
       console.log(err);
+      return { mess: err.message, status: 401 };
     }
   },
 
@@ -258,6 +261,9 @@ const authController = {
         .status(401)
         .json({ mess: "you can't deleted yourself", status: false });
     }
+    const deletePet = await Info.findById(id);
+    await cloudinary.uploader.destroy(deletePet.cloudinary_id);
+    deletePet.remove();
     await User.findByIdAndDelete(id);
 
     res.status(200).json("delete successfully");
@@ -319,6 +325,32 @@ const authController = {
       console.log(error);
     }
   },
+  updateUser: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { password, role } = req.body;
+      const update = {
+        role: role || undefined,
+      };
+
+      if (password) {
+        update.password = await argon2.hash(password);
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(id, update, {
+        new: true,
+      });
+
+      res.json({
+        success: true,
+        message: "User updated successfully",
+        data: updatedUser,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: "Server Error" });
+    }
+  }
 };
 
 module.exports = authController;

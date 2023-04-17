@@ -27,7 +27,7 @@ const bookingController = {
         //tinh gio
         const hour = (end - start) / 3600000; // Lấy số giờ giữa hai thời điểm
         
-        const coin = await Wallet.findOne({userId:'63fa0aaa5c858509e30e2d15'});
+        const coin = await Wallet.findOne({userId:req.userId});
         const balance = coin.coin;
         const ny = await Info.findById(id).populate('user', '_id');
         const totalTimeRent = ny.rent_cost * hour;
@@ -37,7 +37,7 @@ const bookingController = {
         try {
             
             const saveBooking = new Booking({
-                user_id:'63fa0aaa5c858509e30e2d15',
+                user_id:req.userId,
                 ny_id:id,amount:1,
                 startDate,
                 endDate,
@@ -46,7 +46,7 @@ const bookingController = {
             const result =  await saveBooking.save();
 
             const newbalance = balance - totalTimeRent;
-            await Wallet.updateOne({userId:'63fa0aaa5c858509e30e2d15'},{coin:newbalance});
+            await Wallet.updateOne({userId:req.userId},{coin:newbalance});
 
             const token = 'hfcffytf577aadqdqdqwa7'; 
             const expireAt = new Date(Date.now() + 5 * 60 * 1000); 
@@ -54,8 +54,8 @@ const bookingController = {
                 coin:totalTimeRent,
                 token,
                 expireAt,
-                userId:'63fa0aaa5c858509e30e2d15',
-                parterId:'63fa0e28b1073704caa8205c'});
+                userId:req.userId,
+                parterId:id});
                 
             await intermediarysSave.save();
 
@@ -69,9 +69,9 @@ const bookingController = {
           
               // If the token hasn't been used and hasn't expired yet, refund the user's money
               if (expiredToken && !expiredToken.isUsed && expiredToken.expireAt > new Date()) {
-                  const userWallet = await Wallet.findOne({userId: '63fa0aaa5c858509e30e2d15'});
+                  const userWallet = await Wallet.findOne({userId: req.userId});
                   const userBalance = userWallet.coin + expiredToken.coin;
-                  await Wallet.updateOne({userId: '63fa0aaa5c858509e30e2d15'}, {coin: userBalance});
+                  await Wallet.updateOne({userId: req.userId}, {coin: userBalance});
                   await intermediarySchema.deleteOne({_id: expiredToken._id});
                   res.status(401).json({mess:'parter not accept your request'});
               }
@@ -137,11 +137,11 @@ const bookingController = {
             const balanceParter = await Wallet.updateOne({_id:idUser},{ coin:newBalance  });
             await Booking.updateOne({ _id: idBooking },{intermediaryToken:null});
             await intermediarySchema.deleteOne({_id:findIdIntermediary});
-            res.status(200).json({mess:'huy thanh cong'})
+            res.status(200).json({mess:'cancel successfully!!'})
           }
           if(status === 'FINISH'){
             await booking.updateOne({status:'FINISH'});
-            res.json({mess:'Ban da hoan thanh xuat sat nhiem vu'});
+            res.json({mess:'very good confugiration!!'});
           }
         } catch (err) {
           console.error(err);

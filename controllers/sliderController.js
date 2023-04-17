@@ -30,7 +30,7 @@ const sliderController = {
               });
             await sliderSave.save();
      
-            res.status(200).json({mess:'add successfully!!!',slide:sliderSave});
+            res.status(200).json({mess:'add successfully!!!', slide:sliderSave});
         } catch (err) {
             console.log(err)
         }

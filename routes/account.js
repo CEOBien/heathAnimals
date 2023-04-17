@@ -41,9 +41,12 @@ router.delete('/delete',verifyToken,checkRole('admin'),authController.deleteUser
 router.post('/logout',verifyToken,authController.logout);
 
 //search
-router.get('/search',authController.searchUser);
+router.get('/search',verifyToken,checkRole('admin'),authController.searchUser);
 
 //refresh token
 router.post("/refresh",authController.requestRefreshToken);
+
+//update
+router.put("/update/:id",verifyToken,checkRole('admin'),authController.updateUser);
 
 module.exports = router;
