@@ -5,6 +5,7 @@ const Wallet = require("../models/walletSchema");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 let refreshTokens = [];
+let globalEmail;
 const authController = {
   resgister: async (req, res) => {
     const email = req.body.email;
@@ -113,7 +114,7 @@ const authController = {
           success: true,
           message: "User logged in successfully",
           accessToken,
-          data:user.id,
+          data: user.id,
         });
       }
     } catch (error) {
@@ -212,6 +213,9 @@ const authController = {
 
   forgotPasswordEmail: async (req, res) => {
     const { email } = req.body;
+   
+    globalEmail = email;
+    console.log(globalEmail);
     const Check = await User.findOne({ email: email });
     if (!Check) return res.status(401).json("Email does not exist!");
 
@@ -242,16 +246,24 @@ const authController = {
     });
     res.json({ mess: "Please login to your email to get otp" });
   },
-  newPassword: async (req, res) => {
-    const { email, newpassword, code } = req.body;
-    const Check = await User.findOne({ email: email });
+  checkCode: async (req, res) => {
+    const { code,newpassword } = req.body;
+    const Check = await User.findOne({ email: globalEmail });
     const encode = await argon2.verify(Check.resetToken, code);
     if (encode) {
-      const newPassword = await argon2.hash(newpassword);
-      await Check.updateOne({ password: newPassword, resetToken: null });
-      res.json({ mess: "ok:", data: newPassword });
+      return res.json({mess: "please change new password", status:true});
     } else {
       return res.status(401).json("code incorrent");
+    }
+  },
+  newPassword: async (req,res) =>{
+    const newpassword = req.body.newpassword;
+    try {
+      const newPassword = await argon2.hash(newpassword);
+      await User.updateOne({ password: newPassword, resetToken: null });
+      res.json({ mess: "set new password successfully!!", data: newPassword });
+    } catch (error) {
+      console.log(error);
     }
   },
   deleteUser: async (req, res) => {
@@ -261,13 +273,21 @@ const authController = {
         .status(401)
         .json({ mess: "you can't deleted yourself", status: false });
     }
-    const deletePet = await Info.findById(id);
-    await cloudinary.uploader.destroy(deletePet.cloudinary_id);
-    deletePet.remove();
-    await User.findByIdAndDelete(id);
-
-    res.status(200).json("delete successfully");
+    try {
+      const deletePet = await Info.findById(id);
+      await cloudinary.uploader.destroy(deletePet.cloudinary_id);
+      deletePet.remove();
+      await User.findByIdAndDelete(id);
+      res.status(200).json("delete successfully");
+  
+    } catch (error) {
+      console.log(error);
+    }
   },
+    
+    
+
+    
   logout: async (req, res) => {
     try {
       const token = req.headers["authorization"];
@@ -350,7 +370,7 @@ const authController = {
       console.log(error);
       res.status(500).json({ success: false, message: "Server Error" });
     }
-  }
+  },
 };
 
 module.exports = authController;

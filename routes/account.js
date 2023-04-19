@@ -20,10 +20,10 @@ router.get('/getalluser',verifyToken,checkRole('admin'),authController.getAllUse
 router.put('/changepassword/:id',verifyToken,authController.changePassword);
 //send email
 
-router.post('/resetpassword',verifyToken,authController.forgotPasswordEmail);
+router.post('/resetpassword',authController.forgotPasswordEmail);
 
 //new password
-router.put('/newpassword',verifyToken,authController.newPassword);
+router.put('/newpassword',authController.newPassword);
 
 //auth google
 router.get(
