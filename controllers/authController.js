@@ -247,7 +247,7 @@ const authController = {
     res.json({ mess: "Please login to your email to get otp" });
   },
   checkCode: async (req, res) => {
-    const { code,newpassword } = req.body;
+    const { code} = req.body;
     const Check = await User.findOne({ email: globalEmail });
     const encode = await argon2.verify(Check.resetToken, code);
     if (encode) {
