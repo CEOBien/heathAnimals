@@ -227,13 +227,13 @@ const authController = {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "daohai271@gmail.com", // generated ethereal user
-        pass: "czfhwpmbnrouvbos", // generated ethereal password
+        user: "dxhai.20it11@vku.udn.vn", // generated ethereal user
+        pass: "zywquihcwmtpnahj", // generated ethereal password
       },
     });
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: "daohai271@gmail.com", // sender address
+      from: "dxhai.20it11@vku.udn.vn", // sender address
       to: email, // list of receivers
       subject: "Get Code Resetpassword", // Subject line
       text:

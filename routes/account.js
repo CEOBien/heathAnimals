@@ -39,7 +39,7 @@ router.get(
 router.get('/auth/google/callback', passport.authenticate('google'),authController.loginGoogleSuccess);
 
 //delete User
-router.delete('/delete',verifyToken,checkRole('admin'),authController.deleteUser);
+router.delete('/delete/:id',verifyToken,checkRole('admin'),authController.deleteUser);
 
 //logout
 router.post('/logout',verifyToken,authController.logout);
