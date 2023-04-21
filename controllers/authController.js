@@ -1,9 +1,11 @@
 const User = require("../models/userSchame.js");
+const Info = require('../models/infoUserSchema.js')
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const Wallet = require("../models/walletSchema");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const cloudinary = require("cloudinary").v2;
 let refreshTokens = [];
 let globalEmail;
 const authController = {
@@ -274,9 +276,12 @@ const authController = {
         .json({ mess: "you can't deleted yourself", status: false });
     }
     try {
-      const deletePet = await Info.findById(id);
-      await cloudinary.uploader.destroy(deletePet.cloudinary_id);
-      deletePet.remove();
+      const deletePet = await Info.findOne({user:id});
+      if(deletePet){
+        await cloudinary.uploader.destroy(deletePet.img);
+        deletePet.remove();
+      }
+      
       await User.findByIdAndDelete(id);
       res.status(200).json("delete successfully");
   
