@@ -23,11 +23,11 @@ router.put('/changepassword/:id',verifyToken,authController.changePassword);
 router.post('/resetpassword',authController.forgotPasswordEmail);
 
 //check code
-router.get('/checkcode', authController.checkCode);
+router.post('/checkcode', authController.checkCode);
 
 
 //new password
-router.put('/newpassword',authController.newPassword);
+router.patch('/newpassword',authController.newPassword);
 
 //auth google
 router.get(
