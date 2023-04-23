@@ -1,5 +1,5 @@
 const User = require("../models/userSchame.js");
-const Info = require('../models/infoUserSchema.js')
+const Info = require("../models/infoUserSchema.js");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const Wallet = require("../models/walletSchema");
@@ -116,7 +116,7 @@ const authController = {
           success: true,
           message: "User logged in successfully",
           accessToken,
-          data: user.id,
+          data: user,
         });
       }
     } catch (error) {
@@ -215,16 +215,11 @@ const authController = {
 
   forgotPasswordEmail: async (req, res) => {
     const { email } = req.body;
-   
-    globalEmail = email;
-    console.log(globalEmail);
     const Check = await User.findOne({ email: email });
     if (!Check) return res.status(401).json("Email does not exist!");
-
     const otp = Math.floor(Math.random() * 900000) + 100000;
     const hashOtp = await argon2.hash(otp.toString());
     const resetToken = await Check.updateOne({ resetToken: hashOtp });
-
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
       service: "gmail",
@@ -246,24 +241,36 @@ const authController = {
         "\n\nIf you have any questions, please contact us at the email below:" +
         "\n\ndxhai.20it11@vku.udn.vn \ndaohai271@gmail.com", // plain text body
     });
-    res.json({ mess: "Please login to your email to get otp" });
+    res.json({ mess: "Please login to your email to get otp" ,data:Check});
+
+    
   },
   checkCode: async (req, res) => {
-    const { code} = req.body;
-    const Check = await User.findOne({ email: globalEmail });
-    const encode = await argon2.verify(Check.resetToken, code);
-    if (encode) {
-      return res.json({mess: "please change new password", status:true});
+    
+    const { code } = req.body;
+
+    const Verify = await argon2.verify(Check.resetToken, code);
+
+    if (Verify == true) {
+      res.json({ mess: "chang new password" });
     } else {
-      return res.status(401).json("code incorrent");
+      return res.json("code incorrect!!");
     }
   },
-  newPassword: async (req,res) =>{
-    const newpassword = req.body.newpassword;
+  newPassword: async (req, res) => {
     try {
-      const newPassword = await argon2.hash(newpassword);
-      await User.updateOne({ password: newPassword, resetToken: null });
-      res.json({ mess: "set new password successfully!!", data: newPassword });
+      if (Check) {
+        const newpassword = req.body.newpassword;
+        const idUser = await User.findOne({ email: Check.email });
+        const newPassword = await argon2.hash(newpassword);
+        const updateUser = await User.updateOne(
+          { _id: idUser._id },
+          { password: newPassword, resetToken: null }
+        );
+        res.json({ mess: "set new password successfully!!", data: updateUser });
+      } else {
+        return res.json({ mess: "encode incorrect!!" });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -276,23 +283,19 @@ const authController = {
         .json({ mess: "you can't deleted yourself", status: false });
     }
     try {
-      const deletePet = await Info.findOne({user:id});
-      if(deletePet){
+      const deletePet = await Info.findOne({ user: id });
+      if (deletePet) {
         await cloudinary.uploader.destroy(deletePet.img);
         deletePet.remove();
       }
-      
+
       await User.findByIdAndDelete(id);
       res.status(200).json("delete successfully");
-  
     } catch (error) {
       console.log(error);
     }
   },
-    
-    
 
-    
   logout: async (req, res) => {
     try {
       const token = req.headers["authorization"];
