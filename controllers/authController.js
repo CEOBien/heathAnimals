@@ -243,41 +243,41 @@ const authController = {
     });
     const accessOtpToken = jwt.sign(
       {
-        id: Check.id,
+        id: Check._id,
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: "5m",
       }
     );
-    res.json({ mess: "Please login to your email to get otp", accessOtpToken });
+    res.json({
+      mess: "Please login to your email to get otp",
+      accessOtpToken,
+      data: Check,
+    });
   },
-  checkCode: async (req, res) => {
+  checkCode: async (req, res, next) => {
     const { code } = req.body;
-    console.log(req.id);
+    const id = req.userId;
+    const idCode = await User.findOne({ _id: id });
+    const verifyCode = await argon2.verify(idCode.resetToken, code);
 
-    // const Verify = await argon2.verify(Check.resetToken, code);
-
-    // if (Verify == true) {
-    //   res.json({ mess: "chang new password" });
-    // } else {
-    //   return res.json("code incorrect!!");
-    // }
+    if (verifyCode == true) {
+      
+      res.json({mess:"change new pasword"})
+    } else {
+      return res.json({ mess: "Code incorect!!", status: false });
+    }
   },
   newPassword: async (req, res) => {
     try {
-      if (Check) {
-        const newpassword = req.body.newpassword;
-        const idUser = await User.findOne({ email: Check.email });
-        const newPassword = await argon2.hash(newpassword);
-        const updateUser = await User.updateOne(
-          { _id: idUser._id },
-          { password: newPassword, resetToken: null }
-        );
-        res.json({ mess: "set new password successfully!!", data: updateUser });
-      } else {
-        return res.json({ mess: "encode incorrect!!" });
-      }
+      const newpassword = req.body.newpassword;
+      const newPassword = await argon2.hash(newpassword);
+      const updateUser = await User.updateOne(
+        { _id: req.userId },
+        { password: newPassword, resetToken: null }
+      );
+      res.json({ mess: "set new password successfully!!", data: updateUser });
     } catch (error) {
       console.log(error);
     }
