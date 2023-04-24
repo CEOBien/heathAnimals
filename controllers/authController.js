@@ -241,21 +241,28 @@ const authController = {
         "\n\nIf you have any questions, please contact us at the email below:" +
         "\n\ndxhai.20it11@vku.udn.vn \ndaohai271@gmail.com", // plain text body
     });
-    res.json({ mess: "Please login to your email to get otp" ,data:Check});
-
-    
+    const accessOtpToken = jwt.sign(
+      {
+        id: Check.id,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "5m",
+      }
+    );
+    res.json({ mess: "Please login to your email to get otp", accessOtpToken });
   },
   checkCode: async (req, res) => {
-    
     const { code } = req.body;
+    console.log(req.id);
 
-    const Verify = await argon2.verify(Check.resetToken, code);
+    // const Verify = await argon2.verify(Check.resetToken, code);
 
-    if (Verify == true) {
-      res.json({ mess: "chang new password" });
-    } else {
-      return res.json("code incorrect!!");
-    }
+    // if (Verify == true) {
+    //   res.json({ mess: "chang new password" });
+    // } else {
+    //   return res.json("code incorrect!!");
+    // }
   },
   newPassword: async (req, res) => {
     try {

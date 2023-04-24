@@ -1,56 +1,82 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 const authController = require("../controllers/authController");
 const authMiddleware = require("../middleware/auth");
-const {checkRole} = require('../middleware/authorization');
-const verifyToken = require('../middleware/auth');
+const { checkRole } = require("../middleware/authorization");
+const verifyToken = require("../middleware/auth");
 
-
-var passport = require('../middleware/passport');
-
+var passport = require("../middleware/passport");
 
 //@https://localhost:3000/auth/register
-router.post('/resgister', authController.resgister);
+router.post("/resgister", authController.resgister);
 //@auth/login
-router.post('/login', authController.login);
+router.post("/login", authController.login);
 //get user
-router.get('/getuser/:id',verifyToken,checkRole('admin'),authController.getUser);
+router.get(
+  "/getuser/:id",
+  verifyToken,
+  checkRole("admin"),
+  authController.getUser
+);
 //get all user
-router.get('/getalluser',verifyToken,checkRole('admin'),authController.getAllUser);
-router.put('/changepassword/:id',verifyToken,authController.changePassword);
+router.get(
+  "/getalluser",
+  verifyToken,
+  checkRole("admin"),
+  authController.getAllUser
+);
+router.put("/changepassword/:id", verifyToken, authController.changePassword);
 //send email
 
-router.post('/resetpassword',authController.forgotPasswordEmail);
+router.post("/resetpassword", authController.forgotPasswordEmail);
 
 //check code
-router.post('/checkcode', authController.checkCode);
-
+router.post("/checkcode", verifyToken, authController.checkCode);
 
 //new password
-router.patch('/newpassword',authController.newPassword);
+router.patch("/newpassword", verifyToken, authController.newPassword);
 
 //auth google
 router.get(
-    '/auth/google',
-    passport.authenticate('google', {
-      scope: ['profile', 'email']
-    })
-  );
-router.get('/auth/google/callback', passport.authenticate('google'),authController.loginGoogleSuccess);
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google"),
+  authController.loginGoogleSuccess
+);
 
 //delete User
-router.delete('/delete/:id',verifyToken,checkRole('admin'),authController.deleteUser);
+router.delete(
+  "/delete/:id",
+  verifyToken,
+  checkRole("admin"),
+  authController.deleteUser
+);
 
 //logout
-router.post('/logout',verifyToken,authController.logout);
+router.post("/logout", verifyToken, authController.logout);
 
 //search
-router.get('/search',verifyToken,checkRole('admin'),authController.searchUser);
+router.get(
+  "/search",
+  verifyToken,
+  checkRole("admin"),
+  authController.searchUser
+);
 
 //refresh token
-router.post("/refresh",authController.requestRefreshToken);
+router.post("/refresh", authController.requestRefreshToken);
 
 //update
-router.put("/update/:id",verifyToken,checkRole('admin'),authController.updateUser);
+router.put(
+  "/update/:id",
+  verifyToken,
+  checkRole("admin"),
+  authController.updateUser
+);
 
 module.exports = router;

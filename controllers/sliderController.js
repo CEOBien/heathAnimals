@@ -53,7 +53,10 @@ const sliderController = {
         try {
             
             const deleteSlider = await Slider.findById(id);
-            await cloudinary.uploader.destroy(deleteSlider.cloudinary_id);
+            if(deleteSlider.cloudinary_id){
+                await cloudinary.uploader.destroy(deleteSlider.cloudinary_id);
+            }
+            
             deleteSlider.remove();
             res.json('delete successfully');
             
