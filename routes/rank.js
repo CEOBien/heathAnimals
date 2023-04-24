@@ -10,5 +10,5 @@ router.post('/add',verifyToken,checkRole('admin'),uploadCloud.single('image'),ra
 router.put('/update/:id',verifyToken,checkRole('admin'),uploadCloud.single('image'),rankController.put);
 router.delete('/delete/:id',verifyToken,checkRole('admin'),rankController.delete);
 router.get('/find/:id',verifyToken,checkRole('admin'),rankController.getId);
-router.get('/findall',rankController.getAll);
+router.get('/findall',verifyToken,rankController.getAll);
 module.exports = router;

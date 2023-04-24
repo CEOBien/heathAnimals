@@ -4,7 +4,7 @@ var router = express.Router();
 const verifyToken = require('../middleware/auth');
 const {checkRole} = require('../middleware/authorization');
 
-router.get('/balance/:id', walletController.balanceCurrent);
+router.get('/balance/:id',verifyToken, walletController.balanceCurrent);
 
 
 
