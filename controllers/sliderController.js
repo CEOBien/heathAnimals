@@ -35,7 +35,7 @@ const sliderController = {
   },
   put: async (req, res) => {
     const id = req.params.id;
-    const title = req.body.title;
+    const {title} = req.body;
     const fileData = req.file;
     try {
       const deletePet = await Slider.findById(id);
@@ -45,7 +45,7 @@ const sliderController = {
 
       const updateSlider = await Slider.findByIdAndUpdate(
         id,
-        { option, img: fileData?.path, cloudinary_id: fileData?.filename },
+        { title, img: fileData?.path, cloudinary_id: fileData?.filename },
         { new: true }
       );
       res.json({ success: true, mess: "update success", updateSlider });
