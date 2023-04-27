@@ -7,7 +7,7 @@ const {checkRole} = require('../middleware/authorization');
 //add
 router.post('/add',verifyToken,checkRole('admin'),uploadCloud.single('image'),InfoController.addPets);
 
-router.put('/update/:id',verifyToken,checkRole(['parter', 'admin']),uploadCloud.single('image'),InfoController.update);
+router.patch('/update/:id',verifyToken,checkRole(['parter', 'admin']),uploadCloud.single('image'),InfoController.update);
 router.get('/findinfo/:id',verifyToken,InfoController.findInfoId);
 router.get('/allinfo', verifyToken,InfoController.findAll);
 router.get('/filter',verifyToken,InfoController.fliter);
