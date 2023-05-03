@@ -263,8 +263,7 @@ const authController = {
     const verifyCode = await argon2.verify(idCode.resetToken, code);
 
     if (verifyCode == true) {
-      
-      res.json({mess:"change new pasword"})
+      res.json({ mess: "change new pasword" });
     } else {
       return res.json({ mess: "Code incorect!!", status: false });
     }
@@ -300,6 +299,7 @@ const authController = {
       res.status(200).json("delete successfully");
     } catch (error) {
       console.log(error);
+      res.status(500).json({ mess: "error deleted" });
     }
   },
 
@@ -365,7 +365,7 @@ const authController = {
       const { id } = req.params;
       const { password, role } = req.body;
       const update = {
-        role: role || 'user',
+        role: role || "user",
       };
 
       if (password) {
