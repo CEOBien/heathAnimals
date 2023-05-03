@@ -365,7 +365,7 @@ const authController = {
       const { id } = req.params;
       const { password, role } = req.body;
       const update = {
-        role: role || undefined,
+        role: role || 'user',
       };
 
       if (password) {

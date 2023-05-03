@@ -54,17 +54,15 @@ const infoController = {
     const id = req.params.id;
     const option = req.body;
     const fileData = req.file;
-
     try {
       const deletePet = await Info.findById(id);
-      if (deletePet.cloudinary_id){
+      if (deletePet.cloudinary_id) {
         await cloudinary.uploader.destroy(deletePet.cloudinary_id);
       }
-        
 
       const update = await Info.findByIdAndUpdate(
         id,
-        { option, img: fileData?.path, cloudinary_id: fileData?.filename },
+        {  img: fileData?.path, cloudinary_id: fileData?.filename, ...option, },
         { new: true }
       );
       res.json({ success: true, mess: "update success", update });

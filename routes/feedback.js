@@ -7,5 +7,6 @@ router.post('/add/:id',verifyToken,checkRole(['user', 'admin']),feedbackControll
 router.put('/update/:id',verifyToken,checkRole('user'),feedbackController.updateFeedback);
 router.delete('/delete:id',verifyToken,checkRole(['user', 'admin']),feedbackController.deleteFeedback);
 router.get('/findall',verifyToken,feedbackController.findAll);
+router.get('/avgRate/:id',verifyToken, feedbackController.avgRate);
 
 module.exports = router;

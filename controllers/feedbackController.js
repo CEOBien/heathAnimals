@@ -65,6 +65,22 @@ const feedbackController = {
         } catch (err) {
             console.log(err);
         }
+    },
+    avgRate: async(req,res) => {
+        const id = req.params.id;
+
+        try {
+            const idParter = await Feedbacks.find({ny_id:id});
+            
+            const rateParter = idParter.reduce((arr,cur) => arr.rate + cur.rate);
+            const avgRateParter = rateParter / idParter.length;
+            res.json(avgRateParter);
+
+        } catch (error) {
+            console.log(error);
+            return res.status(401).json({mess: error})
+            
+        }
     }
 }
 module.exports = feedbackController;
