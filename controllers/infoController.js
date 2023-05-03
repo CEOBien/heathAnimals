@@ -6,8 +6,20 @@ const cloudinary = require("cloudinary").v2;
 
 const infoController = {
   addPets: async (req, res) => {
-    const { name, gender, old, height, weight, skill, phone, address } =
-      req.body;
+    const {
+      name,
+      gender,
+      old,
+      height,
+      weight,
+      skill,
+      phone,
+      address,
+      character,
+      description,
+      appearance,
+      rate,
+    } = req.body;
 
     try {
       const fileData = req.file;
@@ -29,6 +41,10 @@ const infoController = {
         skill,
         img: fileData?.path,
         cloudinary_id: fileData?.filename,
+        description,
+        appearance,
+        character,
+        rate,
         phone,
         address,
         user: req.userId,
@@ -62,7 +78,7 @@ const infoController = {
 
       const update = await Info.findByIdAndUpdate(
         id,
-        {  img: fileData?.path, cloudinary_id: fileData?.filename, ...option, },
+        { img: fileData?.path, cloudinary_id: fileData?.filename, ...option },
         { new: true }
       );
       res.json({ success: true, mess: "update success", update });

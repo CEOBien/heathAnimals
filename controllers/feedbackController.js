@@ -78,7 +78,7 @@ const feedbackController = {
 
         } catch (error) {
             console.log(error);
-            return res.status(401).json({mess: error})
+            return res.status(401).json({mess: "error", error:error})
             
         }
     }

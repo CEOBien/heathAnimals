@@ -15,25 +15,46 @@ const infoSchema = new Schema({
         require:true
     },
     height:{
-        type:Number
+        type:Number,
+        require:true
     },
     weight:{
-        type:Number
+        type:Number,
+        require:true
     },
     skill:{
-        type:String
+        type:String,
+        require:true
     },
     phone:{
-        type:Number
+        type:Number,
+        require:true
     },
     address:{
-        type:String
+        type:String,
+        require:true
     },
     img:{
-        type:String
+        type:String,
+        require:true
     },
     cloudinary_id:{
         type:String
+    },
+    description:{
+        type:String,
+        require:true
+    },
+    character:{
+        type:String,
+        require:true
+    },
+    appearance:{
+        type:String,
+        require:true
+    },
+    rate:{
+        type:Number
     },
     lit:{
         type:Number
