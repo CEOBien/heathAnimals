@@ -54,7 +54,9 @@ const infoSchema = new Schema({
         require:true
     },
     rate:{
-        type:Number
+        type:Number,
+        min:0,
+        max:5
     },
     lit:{
         type:Number
