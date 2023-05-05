@@ -38,6 +38,18 @@ const infoUserSchema = new Schema({
     cloudinary_id:{
         type:String
     },
+    description:{
+        type:String,
+        require:true
+    },
+    character:{
+        type:String,
+        require:true
+    },
+    appearance:{
+        type:String,
+        require:true
+    },
     createdAt:{
         type:Date,
         default: Date.now

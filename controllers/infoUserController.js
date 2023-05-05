@@ -4,7 +4,7 @@ const cloudinary = require("cloudinary").v2;
 
 const infoUserController = {
   addPets: async (req, res) => {
-    const { name, gender, old, phone, address } = req.body;
+    const { name, gender, old, phone, address, character, description, appearance } = req.body;
 
     try {
       const fileData = req.file;
@@ -18,7 +18,11 @@ const infoUserController = {
         img: fileData.path,
         phone,
         address,
+        description,
+        character,
+        appearance,
         cloudinary_id: fileData?.filename,
+        
         user: req.userId,
       });
 
