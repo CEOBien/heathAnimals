@@ -35,7 +35,11 @@ const bookingSchema = new Schema({
     },
     intermediaryToken:{
         type:String
-    }
+    },
+    address:{
+        type:String,
+        require:true
+    },
 },{timestamps:true});
 
 module.exports = mongoose.model('booking', bookingSchema);
