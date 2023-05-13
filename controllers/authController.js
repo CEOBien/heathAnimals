@@ -296,7 +296,7 @@ const authController = {
       }
 
       await User.findByIdAndDelete(id);
-      await Wallet.findOne({userId:id})
+      await Wallet.findOneAndDelete({userId:id})
       res.status(200).json("delete successfully");
     } catch (error) {
       console.log(error);
