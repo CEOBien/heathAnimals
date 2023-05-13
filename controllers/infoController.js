@@ -125,11 +125,12 @@ const infoController = {
     }
   },
 
-  fliter: async (req, res) => {
+  fillter: async (req, res) => {
     var height = req.body.height;
     var weight = req.body.weight;
     var old = req.body.old;
     var rank = req.body.rank;
+    
 
     var findRank = await Rank.find({ name: rank });
 
