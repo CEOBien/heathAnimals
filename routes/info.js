@@ -10,7 +10,7 @@ router.post('/add',verifyToken,checkRole('admin'),uploadCloud.single('image'),In
 router.patch('/update/:id',verifyToken,checkRole(['parter', 'admin']),uploadCloud.single('image'),InfoController.update);
 router.get('/findinfo/:id',verifyToken,InfoController.findInfoId);
 router.get('/allinfo', verifyToken,InfoController.findAll);
-router.get('/filter',verifyToken,InfoController.fillter);
+router.get('/filter',verifyToken, InfoController.fillter);
 
 
 
