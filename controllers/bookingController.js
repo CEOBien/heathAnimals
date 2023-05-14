@@ -180,8 +180,7 @@ const bookingController = {
     const id = req.params.id;
     try {
       const listBookingParter = await Booking.find(
-        { ny_id: id },
-        { status: ["INACCEPT", "ACCPET"] }
+        { ny_id: id }
       );
 
       return res.json({ data: listBookingParter });
@@ -189,6 +188,15 @@ const bookingController = {
       console.log(err);
     }
   },
+  // deleteAll: async (req, res) => {
+  //   try {
+  //     await Booking.deleteMany();
+
+  //     res.json('Đã xóa hết dữ liệu trong bảng "booking"');
+  //   } catch (error) {
+  //     return res.json(errpr);
+  //   }
+  // },
 };
 
 module.exports = bookingController;

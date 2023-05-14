@@ -7,6 +7,7 @@ const verifyToken = require('../middleware/auth');
 router.post('/add/:id',verifyToken,bookingController.add);
 router.put('/handel/:id',verifyToken,bookingController.handleBookingAccept);
 router.get('/listbooking/:id',verifyToken,bookingController.getIdBooking);
+//router.delete('/delete', bookingController.deleteAll);
 
 
 
