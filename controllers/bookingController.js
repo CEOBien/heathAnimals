@@ -105,7 +105,7 @@ const bookingController = {
 
       res.json({ mess: "successfully!!!", data: result });
     } catch (err) {
-      console.log(err);
+      return res.json(err);
     }
   },
   handleBookingAccept: async (req, res) => {
@@ -146,7 +146,7 @@ const bookingController = {
         res.json({ message: "Accept successfully" });
       }
       if (status === "CANCEL") {
-        // Cập nhật trạng thái booking thành ACCEPT
+        // Cập nhật trạng thái booking thành CANCEL
         await booking.updateOne({ status: "CANCEL" });
         const idUser = await Wallet.findOne({ userId: booking.user_id._id });
 
@@ -179,9 +179,7 @@ const bookingController = {
   getIdBooking: async (req, res) => {
     const id = req.params.id;
     try {
-      const listBookingParter = await Booking.find(
-        { ny_id: id }
-      );
+      const listBookingParter = await Booking.find({ ny_id: id });
 
       return res.json({ data: listBookingParter });
     } catch (err) {
