@@ -31,14 +31,19 @@ const bookingController = {
     const hour = (end - start) / 3600000; // Lấy số giờ giữa hai thời điểm
 
     const coin = await Wallet.findOne({ userId: req.userId });
-    const balance = coin.coin;
-    const ny = await Info.findById(id).populate("user", "_id");
-    const totalTimeRent = ny.rent_cost * hour;
-    if (balance < totalTimeRent) {
-      return res
-        .status(401)
-        .json({ mess: "ban khong du tien ma doi hop tac?" });
+    if(coin){
+      const balance = coin.coin;
+      const ny = await Info.findById(id).populate("user", "_id");
+      const totalTimeRent = ny.rent_cost * hour;
+      if (balance < totalTimeRent) {
+        return res
+          .status(401)
+          .json({ mess: "ban khong du tien ma doi hop tac?" });
+      }
+    }else{
+      return res.json({mess:"not found"});
     }
+   
     try {
       const saveBooking = new Booking({
         user_id: req.userId,
