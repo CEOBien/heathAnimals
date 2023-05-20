@@ -200,6 +200,16 @@ const bookingController = {
   //     return res.json(errpr);
   //   }
   // },
+  delete: async (req,res) =>{
+    const id = req.params.id;
+    try{
+      await Booking.findByIdAndDelete(id);
+      res.json('delete successfully');
+
+    }catch(err){
+      console.log(err);
+    }
+  }
 };
 
 module.exports = bookingController;
