@@ -31,19 +31,18 @@ const bookingController = {
     const hour = (end - start) / 3600000; // Lấy số giờ giữa hai thời điểm
 
     const coin = await Wallet.findOne({ userId: req.userId });
-    if(coin){
-      const balance = coin.coin;
-      const ny = await Info.findById(id).populate("user", "_id");
-      const totalTimeRent = ny.rent_cost * hour;
-      if (balance < totalTimeRent) {
-        return res
-          .status(401)
-          .json({ mess: "ban khong du tien ma doi hop tac?" });
-      }
-    }else{
-      return res.json({mess:"not found"});
+    if (!coin) {
+      return res.json({ mess: "not found wallet" });
     }
-   
+    const balance = coin.coin;
+    const ny = await Info.findById(id).populate("user", "_id");
+    const totalTimeRent = ny.rent_cost * hour;
+    if (balance < totalTimeRent) {
+      return res
+        .status(401)
+        .json({ mess: "ban khong du tien ma doi hop tac?" });
+    }
+
     try {
       const saveBooking = new Booking({
         user_id: req.userId,
@@ -56,6 +55,7 @@ const bookingController = {
         price: totalTimeRent,
       });
       const result = await saveBooking.save();
+      console.log(saveBooking);
 
       const newbalance = balance - totalTimeRent;
       await Wallet.updateOne({ userId: req.userId }, { coin: newbalance });
@@ -200,16 +200,15 @@ const bookingController = {
   //     return res.json(errpr);
   //   }
   // },
-  delete: async (req,res) =>{
+  delete: async (req, res) => {
     const id = req.params.id;
-    try{
+    try {
       await Booking.findByIdAndDelete(id);
-      res.json('delete successfully');
-
-    }catch(err){
+      res.json("delete successfully");
+    } catch (err) {
       console.log(err);
     }
-  }
+  },
 };
 
 module.exports = bookingController;
