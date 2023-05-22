@@ -16,7 +16,7 @@ const experienceController = {
         if(rank){
           const update = await experience.updateOne({level:rank._id});
           
-          res.json({mess:'chuc mung ban da thang cap', data:update});
+          return update;
         }
         
         
