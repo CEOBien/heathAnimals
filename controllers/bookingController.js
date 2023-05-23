@@ -36,7 +36,7 @@ const bookingController = {
     }
     const balance = coin.coin;
     const ny = await Info.findById(id).populate("user", "_id");
-    const totalTimeRent = ny.rent_cost * hour;
+    const totalTimeRent =Math.round( ny.rent_cost * hour);
     if (balance < totalTimeRent) {
       return res
         .status(401)

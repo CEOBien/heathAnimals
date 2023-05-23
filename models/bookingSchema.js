@@ -30,7 +30,7 @@ const bookingSchema = new Schema({
         require:true
     },
     day:{
-        type:String,
+        type:Date,
         require:true
     },
     intermediaryToken:{

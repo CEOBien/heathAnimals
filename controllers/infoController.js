@@ -97,7 +97,9 @@ const infoController = {
         populate: {
           path: "level",
           model: "rank",
-        },
+          
+        }
+       
       });
 
       res.json(getPet);
