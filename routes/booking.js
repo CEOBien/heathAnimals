@@ -14,5 +14,10 @@ router.delete(
   checkRole("admin"),
   bookingController.delete
 );
+router.get(
+  "/listuserbooking/:id",
+  verifyToken,
+  bookingController.getUserBooking
+);
 
 module.exports = router;

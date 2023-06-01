@@ -36,7 +36,7 @@ const bookingController = {
     }
     const balance = coin.coin;
     const ny = await Info.findById(id).populate("user", "_id");
-    const totalTimeRent =Math.round( ny.rent_cost * hour);
+    const totalTimeRent = Math.round(ny.rent_cost * hour);
     if (balance < totalTimeRent) {
       return res
         .status(401)
@@ -108,7 +108,7 @@ const bookingController = {
 
       const Happy = experienceController.getId(req, res, id);
 
-      res.json({ mess: "successfully!!!", data: result, upLevel:Happy });
+      res.json({ mess: "successfully!!!", data: result, upLevel: Happy });
     } catch (err) {
       return res.json(err);
     }
@@ -185,6 +185,16 @@ const bookingController = {
     const id = req.params.id;
     try {
       const listBookingParter = await Booking.find({ ny_id: id });
+
+      return res.json({ data: listBookingParter });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getUserBooking: async (req, res) => {
+    const id = req.params.id;
+    try {
+      const listBookingParter = await Booking.find({ user_id: id });
 
       return res.json({ data: listBookingParter });
     } catch (err) {
